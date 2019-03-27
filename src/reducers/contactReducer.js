@@ -43,7 +43,6 @@ export default function(state = initialState, action){
           }
           return contact;
         })
-        //let stateClone = Object.assign({}, state);
         state.contacts = updatedContacts;
         return state;
 
@@ -51,6 +50,9 @@ export default function(state = initialState, action){
         state.contacts.push(action.payload);
         return state;
 
+      case 'DELETE_CONTACT':
+        state.contacts = state.contacts.filter(contact => action.id !== contact.id)
+        return {...state};
 
     	default:{
     		return state;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 class Contact extends Component {
   state = {
@@ -9,6 +10,9 @@ class Contact extends Component {
 
   onDeleteClick = id => {
     //// DELETE CONTACT ////
+    if (window.confirm(`Möchten Sie diesen Kontakt wirklich löschen?`)) {
+      this.props.deleteContact(id)
+    } 
   };
 
   render() {
@@ -60,4 +64,15 @@ Contact.propTypes = {
   contact: PropTypes.object.isRequired
 };
 
-export default Contact;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    deleteContact : (id) => {
+      dispatch({
+        type : "DELETE_CONTACT",
+        id : id
+      })
+    }
+  }
+}
+
+export default connect(null,mapDispatchToProps)(Contact);
