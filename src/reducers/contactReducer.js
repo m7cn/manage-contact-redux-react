@@ -1,40 +1,60 @@
 const initialState = {
-	contacts: [
-      {
-        id: 1,
-        name: 'Mohamed IDBRAHIM',
-        email: 'idbrahimdev@gmail.com',
-        phone: '0650303315'
-      },
-      {
-        id: 2,
-        name: 'Basma IDBRAHIM',
-        email: 'basma@gmail.com',
-        phone: '0650303316'
-      },
-      {
-        id: 3,
-        name: 'Walid IDBRAHIM',
-        email: 'walid@gmail.com',
-        phone: '0650303317'
-      },
-      {
-        id: 4,
-        name: 'fff IDBRAHIM',
-        email: 'fff@gmail.com',
-        phone: '0650322217'
-      }
-    ]
+contacts: [
+    {
+      id: 1,
+      name: 'Mohamed IDBRAHIM',
+      email: 'idbrahimdev@gmail.com',
+      phone: '0650303315',
+      errors:{}
+    },
+    {
+      id: 2,
+      name: 'Basma IDBRAHIM',
+      email: 'basma@gmail.com',
+      phone: '0650303316',
+      errors:{}
+    },
+    {
+      id: 3,
+      name: 'Walid IDBRAHIM',
+      email: 'walid@gmail.com',
+      phone: '0650303317',
+      errors:{}
+    },
+    {
+      id: 4,
+      name: 'fff IDBRAHIM',
+      email: 'fff@gmail.com',
+      phone: '0650322217',
+      errors:{}
+    }
+  ]
 };
 
 export default function(state = initialState, action){
-	switch(action.type){
-    case 'GET_CONTACTS' : return {
-      ...state
+    switch(action.type){
+      case 'GET_CONTACTS' : return {
+        ...state
+      }
+      case 'UPDATE_CONTACT' : 
+        const updatedContacts = state.contacts.map(contact => {
+          if(contact.id === action.payload.id){
+            return {...contact,...action.payload }
+          }
+          return contact;
+        })
+        //let stateClone = Object.assign({}, state);
+        state.contacts = updatedContacts;
+        return state;
+
+      case 'ADD_CONTACT':
+        state.contacts.push(action.payload);
+        return state;
+
+
+    	default:{
+    		return state;
+    	}
     }
-		default:{
-			return state;
-		}
-	}
 }
 

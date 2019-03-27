@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import TextInputGroup from '../layout/TextInputGroup';
+import { connect } from 'react-redux';
 
 class EditContact extends Component {
   state = {
@@ -8,6 +9,11 @@ class EditContact extends Component {
     phone: '',
     errors: {}
   };
+
+  componentDidMount(){
+    this.setState(this.props.contacts.filter(contact => parseInt(this.props.match.params.id) === contact.id )[0])
+    // this.props.getContact(this.props.match.params.id);
+  }
 
   onSubmit = (e) => {
     e.preventDefault();
@@ -30,16 +36,15 @@ class EditContact extends Component {
       return;
     }
 
+    const { id } = this.props.match.params;
     const updContact = {
+      id:parseInt(id),
       name,
       email,
       phone
     };
-
-    const { id } = this.props.match.params;
-
     //// UPDATE CONTACT ////
-
+    this.props.updateContact(updContact);
     // Clear State
     this.setState({
       name: '',
@@ -54,6 +59,7 @@ class EditContact extends Component {
   onChange = e => this.setState({ [e.target.name]: e.target.value });
 
   render() {
+    //const { name, email, phone, errors } = this.state;
     const { name, email, phone, errors } = this.state;
 
     return (
@@ -97,5 +103,22 @@ class EditContact extends Component {
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    contacts : state.myContact.contacts
+  }
+}
 
-export default EditContact;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateContact : (contact) => {
+      dispatch({
+        type:'UPDATE_CONTACT',
+        payload:contact
+      })
+    }
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(EditContact);
+//export default EditContact;

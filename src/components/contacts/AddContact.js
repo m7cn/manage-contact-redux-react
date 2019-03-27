@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import TextInputGroup from '../layout/TextInputGroup';
+import {connect} from 'react-redux';
 
 class AddContact extends Component {
   state = {
@@ -29,15 +30,16 @@ class AddContact extends Component {
       this.setState({ errors: { phone: 'Phone is required' } });
       return;
     }
-
+    let id = this.props.contactCount + 1;
     const newContact = {
+      id,
       name,
       email,
       phone
     };
 
     //// SUBMIT CONTACT ////
-
+    this.props.addContact(newContact);
     // Clear State
     this.setState({
       name: '',
@@ -96,4 +98,20 @@ class AddContact extends Component {
   }
 }
 
-export default AddContact;
+const mapStateToProps = (state) =>{
+  return{
+    contactCount : state.myContact.contacts.length
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addContact:(contact)=>{
+      dispatch({
+        type:'ADD_CONTACT',
+        payload:contact
+      })
+    }
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(AddContact);
